@@ -1,5 +1,5 @@
 # Raspberry Pi5-Edge-M.2-Coral_TPU
-## Полное руководство по установке драйверов gasket и apex для Google Coral M.2 TPU на Raspberry Pi 5
+## Полное руководство по установке Google Coral M.2 TPU на Raspberry Pi 5
 ### Оглавление
 1. Подготовка системы
 2. Проверка подключения PCIe
