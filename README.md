@@ -6,12 +6,9 @@
 3. Настройка параметров загрузки
 4. Сборка драйвера gasket
 5. Установка собранного пакета
-6. Загрузка модулей и настройка автозагрузки
-7. Настройка прав доступа
-8. Финальная проверка
-9. Установка pyenv и виртуального окружения 
-10. Установка Python 3.9.16
-11. Установка CoralTPU и финальное тестирование
+6. Настройка прав доступа и финальная проверка
+7. Установка pyenv и Python 3.9.16 (создание VM)
+8. Установка CoralTPU
 
 ### 1.Подготовка системы
 Перед началом убедитесь, что система и установлены необходимые пакеты:
@@ -86,10 +83,9 @@ sed -i 's/class_create(THIS_MODULE, "gasket")/class_create("gasket")/' src/gaske
 # Это займет 1-2 минуты
 debuild -us -uc -tc -b
 ```
-6.Установка собранного драйвера:
+###5.Установка собранного драйвера:
 ```
 cd ..
-# Устанавливаем наш свежий драйвер
 sudo dpkg -i gasket-dkms_*.deb
 ```
 Создание файла coral-msi-fix.dts
@@ -143,7 +139,7 @@ ls /dev/apex*
 echo "gasket" | sudo tee /etc/modules-load.d/gasket.conf
 echo "apex" | sudo tee -a /etc/modules-load.d/gasket.conf
 ```
-Настройка прав доступа  
+###6.Настройка прав доступа и финальная проверка
 Создайте udev-правило для корректных прав на устройство:
 ```
 sudo sh -c 'echo "SUBSYSTEM==\"apex\", MODE=\"0660\", GROUP=\"apex\"" > /etc/udev/rules.d/65-apex.rules'
@@ -152,7 +148,7 @@ sudo usermod -a -G apex $USER
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
-Перезагрузка и финальная проверка:
+Перезагрузка:
 ```
 sudo reboot
 ```
@@ -162,7 +158,7 @@ ls -l /dev/apex*               # должно быть /dev/apex_0
 lsmod | grep -E "gasket|apex"  # модули должны быть загружены
 dmesg | grep -i apex | tail -10 # сообщения об инициализации
 ```
-Установка Pyenv и python 3.9.16  
+###7. Установка pyenv и Python 3.9.16 (создание VM)
 Установка pyenv и зависимостей: (когда всплывёт диалоговое окно - нажмите Tab и enter)
 ```
 sudo apt update
@@ -200,14 +196,12 @@ source ~/.bashrc
 Проверьте, что pyenv теперь доступен:
 ```
 pyenv --version
-```
-Установите Python 3.9.16 и создайте venv:  
+``` 
 Скачайте архив Python 3.9.16:
 ```
 cd /tmp
 wget https://www.python.org/ftp/python/3.9.16/Python-3.9.16.tar.xz
 ```
-###Установите Python 3.9.16 через pyenv, используя скачанный архив  
 Скопируйте архив в кэш pyenv:
 ```
 mkdir -p ~/.pyenv/cache
@@ -242,7 +236,7 @@ python --version   # должно быть 3.9.16
 pip install --upgrade pip
 pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 ```
-Подключаем репозиторий Coral и устанавливаем runtime
+###8. Установка CoralTPU
 ```
 # Репозиторий
 echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
