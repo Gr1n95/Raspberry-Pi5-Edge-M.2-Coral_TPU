@@ -91,8 +91,6 @@ debuild -us -uc -tc -b
 cd ..
 # Устанавливаем наш свежий драйвер
 sudo dpkg -i gasket-dkms_*.deb
-# Устанавливаем библиотеку (она теперь встанет нормально)
-#sudo apt-get install -y libedgetpu1-std
 ```
 Создание файла coral-msi-fix.dts
 ```
@@ -242,7 +240,7 @@ python --version   # должно быть 3.9.16
 Установка PyCoral из официального репозитория Google 
 ```
 pip install --upgrade pip
-pip install --extra-index-url https://google-coral.github.io/py-repo/rpicoral ~=2.0 #(pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral)
+pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 ```
 Подключаем репозиторий Coral и устанавливаем runtime
 ```
