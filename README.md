@@ -64,7 +64,7 @@ sudo reboot
 Убедитесь, что Docker установлен и работает:
 ```
 sudo systemctl enable --now docker
-docker –version
+docker --version
 ```
 ### 4.Сборка драйвера Gasket
 Установка инструментов для сборки 
@@ -84,7 +84,7 @@ cd gasket-driver
 sed -i 's/class_create(THIS_MODULE, "gasket")/class_create("gasket")/' src/gasket_core.c
 # 3. Собираем установочный пакет (.deb)
 # Это займет 1-2 минуты
-debuild -us -uc -tc –b
+debuild -us -uc -tc -b
 ```
 6.Установка собранного драйвера:
 ```
@@ -92,7 +92,7 @@ cd ..
 # Устанавливаем наш свежий драйвер
 sudo dpkg -i gasket-dkms_*.deb
 # Устанавливаем библиотеку (она теперь встанет нормально)
-sudo apt-get install -y libedgetpu1-std
+#sudo apt-get install -y libedgetpu1-std
 ```
 Создание файла coral-msi-fix.dts
 ```
@@ -165,7 +165,7 @@ lsmod | grep -E "gasket|apex"  # модули должны быть загруж
 dmesg | grep -i apex | tail -10 # сообщения об инициализации
 ```
 Установка Pyenv и python 3.9.16  
-Установка pyenv и зависимостей:
+Установка pyenv и зависимостей: (когда всплывёт диалоговое окно - нажмите Tab и enter)
 ```
 sudo apt update
 sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
@@ -209,7 +209,7 @@ pyenv --version
 cd /tmp
 wget https://www.python.org/ftp/python/3.9.16/Python-3.9.16.tar.xz
 ```
-Установите Python 3.9.16 через pyenv, используя скачанный архив  
+###Установите Python 3.9.16 через pyenv, используя скачанный архив  
 Скопируйте архив в кэш pyenv:
 ```
 mkdir -p ~/.pyenv/cache
@@ -239,10 +239,30 @@ source venv/bin/activate
 ```
 python --version   # должно быть 3.9.16
 ```
-Установка PyCoral из официального репозитория Google
+Установка PyCoral из официального репозитория Google 
 ```
 pip install --upgrade pip
-pip install --extra-index-url https://google-coral.github.io/py-repo/rpicoral ~=2.0
+pip install --extra-index-url https://google-coral.github.io/py-repo/rpicoral ~=2.0 #(pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral)
+```
+Подключаем репозиторий Coral и устанавливаем runtime
+```
+# Репозиторий
+echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
+| sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
+
+# Ключ (современный способ)
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+| sudo gpg --dearmor -o /etc/apt/keyrings/coral.gpg
+
+# Привязываем ключ к репо
+echo "deb [signed-by=/etc/apt/keyrings/coral.gpg] https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
+| sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
+
+sudo apt-get update
+
+# Ставим runtime (стандартная частота, меньше нагрев)
+sudo apt-get install -y libedgetpu1-std
 ```
 Даунгрейд NumPy в вашем виртуальном окружении:
 ```
