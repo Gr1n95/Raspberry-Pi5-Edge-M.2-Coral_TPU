@@ -10,7 +10,7 @@
 7. Установка pyenv и Python 3.9.16 (создание VM)
 8. Установка CoralTPU
 
-### 1.Подготовка системы
+### 1. Подготовка системы
 Перед началом убедитесь, что система и установлены необходимые пакеты:
 ```bash
 sudo apt update #&& sudo apt full-upgrade -y
@@ -21,7 +21,7 @@ sudo apt install -y git curl wget build-essential dkms linux-headers-$(uname -r)
 sudo usermod -aG docker $USER
 newgrp docker
 ```
-### 2.Проверка подключения PCIe  
+### 2. Проверка подключения PCIe  
 Убедитесь, что модуль Coral определяется системой:
 ```bash
 lspci -nn | grep 1ac1
@@ -30,7 +30,7 @@ lspci -nn | grep 1ac1
 ```bash
 0000:01:00.0 System peripheral [0880]: Global Unichip Corp. Coral Edge TPU [1ac1:089a]
 ```
-### 3.Настройка параметров загрузки  
+### 3. Настройка параметров загрузки  
 Добавьте необходимые параметры в config.txt:
 ```bash
 sudo nano /boot/firmware/config.txt
@@ -63,7 +63,7 @@ sudo reboot
 sudo systemctl enable --now docker
 docker --version
 ```
-### 4.Сборка драйвера Gasket
+### 4. Сборка драйвера Gasket
 Установка инструментов для сборки 
 ```
 sudo apt-get update
@@ -83,7 +83,7 @@ sed -i 's/class_create(THIS_MODULE, "gasket")/class_create("gasket")/' src/gaske
 # Это займет 1-2 минуты
 debuild -us -uc -tc -b
 ```
-###5.Установка собранного драйвера:
+### 5. Установка собранного драйвера:
 ```
 cd ..
 sudo dpkg -i gasket-dkms_*.deb
@@ -139,7 +139,7 @@ ls /dev/apex*
 echo "gasket" | sudo tee /etc/modules-load.d/gasket.conf
 echo "apex" | sudo tee -a /etc/modules-load.d/gasket.conf
 ```
-###6.Настройка прав доступа и финальная проверка
+### 6. Настройка прав доступа и финальная проверка
 Создайте udev-правило для корректных прав на устройство:
 ```
 sudo sh -c 'echo "SUBSYSTEM==\"apex\", MODE=\"0660\", GROUP=\"apex\"" > /etc/udev/rules.d/65-apex.rules'
@@ -158,7 +158,7 @@ ls -l /dev/apex*               # должно быть /dev/apex_0
 lsmod | grep -E "gasket|apex"  # модули должны быть загружены
 dmesg | grep -i apex | tail -10 # сообщения об инициализации
 ```
-###7. Установка pyenv и Python 3.9.16 (создание VM)
+### 7. Установка pyenv и Python 3.9.16 (создание VM)
 Установка pyenv и зависимостей: (когда всплывёт диалоговое окно - нажмите Tab и enter)
 ```
 sudo apt update
@@ -236,7 +236,7 @@ python --version   # должно быть 3.9.16
 pip install --upgrade pip
 pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 ```
-###8. Установка CoralTPU
+### 8. Установка CoralTPU
 ```
 # Репозиторий
 echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
