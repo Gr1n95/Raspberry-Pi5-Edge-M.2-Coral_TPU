@@ -238,22 +238,14 @@ pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral
 ```
 ### 8. Установка CoralTPU
 ```
-# Репозиторий
 echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
 | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
-
-# Ключ (современный способ)
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
 | sudo gpg --dearmor -o /etc/apt/keyrings/coral.gpg
-
-# Привязываем ключ к репо
 echo "deb [signed-by=/etc/apt/keyrings/coral.gpg] https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
 | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
-
 sudo apt-get update
-
-# Ставим runtime (стандартная частота, меньше нагрев)
 sudo apt-get install -y libedgetpu1-std
 ```
 Даунгрейд NumPy в вашем виртуальном окружении:
