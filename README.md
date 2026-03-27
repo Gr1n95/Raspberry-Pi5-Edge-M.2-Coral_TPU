@@ -13,7 +13,7 @@
 ### 1. Подготовка системы
 Перед началом убедитесь, что система и установлены необходимые пакеты:
 ```bash
-sudo apt update #&& sudo apt full-upgrade -y
+sudo apt update 
 sudo apt install -y git curl wget build-essential dkms linux-headers-$(uname -r) docker.io
 ```
 Добавьте пользователя в группу docker, чтобы использовать Docker без sudo:
